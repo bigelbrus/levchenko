@@ -4,5 +4,5 @@
     <string name="top">Лучшее</string>
     <string name="hot">Горячее</string>
     <string name="no_conection">Нет связи</string>
-    <string name="repeat"><u>ПОВТОРИТЬ?</u></string>
+    <string name="repeat"><u>ПОВТОРИТЬ</u></string>
 </resources>

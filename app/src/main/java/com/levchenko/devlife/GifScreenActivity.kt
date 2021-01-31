@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -25,6 +26,7 @@ class GifScreenActivity : AppCompatActivity() {
         ComponentProvider.getInstance().getGifScreenComponent().inject(this)
         initViews()
         subscribeToViewModels()
+        drawLine(buttonLatest)
     }
 
     private fun subscribeToViewModels() {
@@ -69,6 +71,7 @@ class GifScreenActivity : AppCompatActivity() {
             }
         }
         viewModel.error.observe(this) {
+            errorText.text = it
             errorConnection.isVisible = true
             gifContainer.isVisible = false
         }
@@ -90,15 +93,25 @@ class GifScreenActivity : AppCompatActivity() {
         }
         buttonHot.setOnClickListener {
             viewModel.onHotClick()
+            drawLine(it)
         }
         buttonLatest.setOnClickListener {
             viewModel.onLatestClick()
+            drawLine(it)
         }
         buttonTop.setOnClickListener {
             viewModel.onTopClick()
+            drawLine(it)
         }
         buttonRetry.setOnClickListener {
             viewModel.onRetryClick()
         }
+    }
+
+    private fun drawLine(view: View) {
+        buttonLatest.background = null
+        buttonHot.background = null
+        buttonTop.background = null
+        view.background = ContextCompat.getDrawable(this, R.drawable.bg_line)
     }
 }

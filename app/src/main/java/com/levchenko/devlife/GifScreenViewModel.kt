@@ -15,16 +15,16 @@ class GifScreenViewModel
     var currentPage = 0
     var currentGif = -1
     var gifList: List<GifItemModel> = emptyList()
-    val sectionTop = SectionModel("top")
-    val sectionHot = SectionModel("hot")
-    val sectionLatest = SectionModel("latest")
-    var currentSection: SectionModel = sectionLatest
+
+    private val sectionTop = SectionModel("top")
+    private val sectionHot = SectionModel("hot")
+    private val sectionLatest = SectionModel("latest")
+    private var currentSection: SectionModel = sectionLatest
 
     val gif = MutableLiveData<GifItemModel?>()
     val text = MutableLiveData<String?>()
-    val error = MutableLiveData<Boolean>()
+    val error = MutableLiveData<String>()
     val prefButtonVisibility = MutableLiveData<Boolean>()
-    val nextButtonActive = MutableLiveData<Boolean>()
 
     init {
         onNextButtonClick()
@@ -38,14 +38,14 @@ class GifScreenViewModel
             }.onSuccess {
                 it.result?.let { result ->
                     gifList = gifList + result
-                    setNextButtonActive(result.isNotEmpty())
+                    error.value = "Ничего не пришло"
                 }
                 if (!isRepeat) {
                     currentPage++
                 }
                 setupGif()
             }.onFailure {
-                error.value = true
+                error.value = "Ошибка сети"
             }
         }
     }
@@ -73,10 +73,6 @@ class GifScreenViewModel
 
     private fun setPrevButtonVisibility() {
         prefButtonVisibility.value = currentGif > 0
-    }
-
-    fun setNextButtonActive(isActive: Boolean) {
-        nextButtonActive.value = isActive
     }
 
     private fun setupGif() {
@@ -115,7 +111,7 @@ class GifScreenViewModel
         setNewSection(sectionHot)
     }
 
-    fun onRetryClick(){
+    fun onRetryClick() {
         onRepeat()
     }
 }
